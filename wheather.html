@@ -1,0 +1,91 @@
+<html>
+<head>
+	<title>wheather app</title>
+	<link rel="stylesheet" href="wheather.css">
+</head>
+<body>
+	<div class="card">
+		<div class="search">
+			<input type="text" placeholder="enter the city name" spellcheck="false">
+			<button><img src="C:\Users\ASWNI\Downloads\images\search.png"></button>
+		</div>
+		<div class="error">
+			<p>invalid city name</p>
+		</div>
+		<div class="weather">
+			<img src="C:\Users\ASWNI\Downloads\images\rain.png"class="weather-icon">
+			<h1 class="temp">22°C</h1>
+			<h2 class="city">guntur</h2>
+			<div class="details">
+				<div class="col">
+					<img src="C:\Users\ASWNI\Downloads\images\humidity.png">
+					<div>
+						<p class="humidity">50%</p>
+						<p>humidity</p>
+					</div>
+				</div>
+				<div class="col">
+					<img src="C:\Users\ASWNI\Downloads\images\wind.png">
+					<div>
+						<p class="wind">15 km/h</p>
+						<p>wind speed</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		const apikey="e8ac790180aae00606bef68824e73aa0";
+		const apiUrl="https://api.openweathermap.org/data/2.5/weather?units=mertic&q=";
+		const searchbox=document.querySelector(".search input");
+		const searchbtn=document.querySelector(".search button");
+		const weathericon=document.querySelector(".weather-icon");
+
+
+
+
+		async function checkweather(city){
+			const response=await fetch(apiUrl+ city+`&appid=${apikey}`);
+			if(response.status == 404){
+				document.querySelector(".error").style.display="block";
+				document.querySelector(".weather").style.display="none";
+			}
+			else{
+				var data = await response.json();
+
+			
+			document.querySelector(".city").innerHTML =data.name;
+			document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°C ";
+			document.querySelector(".humidity").innerHTML =data.main.humidity + "% ";
+			document.querySelector(".wind").innerHTML =data.wind.speed + "km/h ";
+			if(data.weather[0].main =="clouds"){
+				weathericon.src="C:\Users\ASWNI\Downloads\images\clouds.png";
+			}
+			else if(data.weather[0].main =="clear"){
+				weathericon.src="C:\Users\ASWNI\Downloads\images\clear.png";
+			}
+			else if(data.weather[0].main =="rain"){
+				weathericon.src="C:\Users\ASWNI\Downloads\images\rain.png";
+
+		    }
+		   else if(data.weather[0].main =="drizzle"){
+				weathericon.src="C:\Users\ASWNI\Downloads\images\drizzle.png";
+			}
+			else if(data.weather[0].main =="mist"){
+				weathericon.src="C:\Users\ASWNI\Downloads\images\mist.png";
+			}
+			document.querySelector(".weather").style.display="block";
+			document.querySelector(".error").style.display="none";
+		}
+
+			}
+			
+		searchbtn.addEventListener("click",()=>{
+			checkweather(searchbox.value);
+
+		})
+
+		
+	</script>
+	</body>
+</html>
